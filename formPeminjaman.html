@@ -1,0 +1,399 @@
+<!DOCTYPE html>
+<html lang="id">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Input Data Peminjaman</title>
+    <style>
+      body {
+        font-family: "Arial", sans-serif;
+        background-color: #f4f4f9;
+        padding: 20px;
+        margin: 0;
+      }
+
+      h2 {
+        text-align: center;
+        color: #333;
+        margin-bottom: 20px;
+        font-size: 24px;
+      }
+
+      form {
+        background-color: #ffffff;
+        padding: 30px;
+        border-radius: 10px;
+        box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+        max-width: 500px;
+        margin: auto;
+        border: 1px solid #ddd;
+      }
+
+      label {
+        font-weight: bold;
+        display: block;
+        margin-bottom: 8px;
+        color: #555;
+      }
+
+      input[type="text"],
+      input[type="number"],
+      input[type="tel"],
+      input[type="date"],
+      select,
+      textarea {
+        width: 100%;
+        padding: 12px;
+        margin-bottom: 20px;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+        font-size: 14px;
+        transition: border-color 0.3s;
+        box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.1);
+      }
+
+      textarea {
+        resize: vertical;
+        height: 100px;
+      }
+
+      input[type="file"] {
+        margin-bottom: 10px;
+      }
+
+      #uploadedImage {
+        max-width: 100%;
+        max-height: 200px;
+        display: none;
+        margin-bottom: 20px;
+      }
+
+      input[type="text"]:focus,
+      input[type="number"]:focus,
+      input[type="tel"]:focus,
+      input[type="date"]:focus,
+      select:focus,
+      textarea:focus {
+        border-color: #ff6f00;
+        outline: none;
+        box-shadow: 0 0 5px rgba(255, 111, 0, 0.5);
+      }
+
+      input[type="submit"],
+      .add-button {
+        background-color: #ff6f00;
+        color: white;
+        border: none;
+        border-radius: 5px;
+        padding: 12px;
+        cursor: pointer;
+        font-size: 16px;
+        width: 100%;
+        transition: background-color 0.3s ease, transform 0.2s ease;
+        margin-top: 10px;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+      }
+
+      .add-button {
+        width: auto;
+        margin-bottom: 10px;
+      }
+
+      input[type="submit"]:hover,
+      .add-button:hover {
+        background-color: #e65a00;
+        transform: scale(1.05);
+      }
+
+      .checkbox-group {
+        display: flex;
+        align-items: center;
+        margin-bottom: 20px;
+      }
+
+      .checkbox-group label {
+        margin-left: 10px;
+        color: #555;
+      }
+
+      .success-message {
+        display: none;
+        text-align: center;
+        color: green;
+        margin-top: 20px;
+      }
+
+      .success-icon {
+        font-size: 50px;
+      }
+
+      #newFormArea {
+        display: none;
+        margin-top: 20px;
+      }
+
+      input[type="submit"]:disabled {
+        background-color: #ccc;
+        cursor: not-allowed;
+      }
+
+      .hidden-section {
+        display: none;
+      }
+
+      @media (max-width: 600px) {
+        form {
+          width: 100%;
+          padding: 20px;
+        }
+
+        h2 {
+          font-size: 22px;
+        }
+
+        input[type="submit"],
+        .add-button {
+          padding: 10px;
+          font-size: 14px;
+        }
+      }
+    </style>
+  </head>
+
+  <body>
+    <h2>Input Data Peminjaman</h2>
+    <form id="myForm">
+      <label for="namaPeminjam">Nama Peminjam:</label>
+      <input type="text" id="namaPeminjam" name="namaPeminjam" required />
+
+      <label for="nip">NIP:</label>
+      <input type="text" id="nip" name="nip" required />
+
+      <label for="jabatan">Jabatan:</label>
+      <input type="text" id="jabatan" name="jabatan" required />
+
+      <label for="nomorTelepon">Nomor Telepon:</label>
+      <input type="tel" id="nomorTelepon" name="nomorTelepon" required />
+
+      <label for="tanggalPinjam">Hari/Tanggal Pinjam:</label>
+      <input type="date" id="tanggalPinjam" name="tanggalPinjam" required />
+
+      <label for="tanggalKembali">Hari/Tanggal Kembali:</label>
+      <input type="date" id="tanggalKembali" name="tanggalKembali" required />
+
+      <label for="ruangan">Ruangan:</label>
+      <select id="ruangan" name="ruangan" required>
+        <option value="" disabled selected>Pilih Ruangan</option>
+      </select>
+
+      <!-- Hidden section that will be revealed when 'ruangan' is selected -->
+      <div id="hiddenSection" class="hidden-section">
+        <label for="jenisBarang">Jenis Barang yang Dipinjam:</label>
+        <select id="jenisBarang" name="jenisBarang">
+          <option value="" disabled selected>Pilih Jenis Barang</option>
+        </select>
+
+        <!-- Tombol untuk menambahkan Jenis Barang -->
+        <button type="button" class="add-button" id="addJenisBarang">
+          Tambah Jenis Barang
+        </button>
+
+        <!-- Textarea untuk menampilkan Jenis Barang yang dipilih -->
+        <label for="jenisBarangSelected">Jenis Barang yang Dipilih:</label>
+        <textarea
+          id="jenisBarangSelected"
+          name="jenisBarangSelected"
+          readonly
+        ></textarea>
+
+        <!-- Tambahkan Tombol Upload Foto -->
+        <label for="uploadFoto">Upload Foto Barang:</label>
+        <input type="file" id="uploadFoto" accept="image/*" required />
+
+        <!-- Gambar yang di-upload akan ditampilkan di sini -->
+        <img id="uploadedImage" src="" alt="Foto Barang yang di-upload" />
+
+        <div class="checkbox-group">
+          <input
+            type="checkbox"
+            id="kesepakatan"
+            name="checkBoxKesepakatan"
+            required
+          />
+          <label for="kesepakatan"
+            >Saya akan mengembalikan barang sesuai kesepakatan</label
+          >
+        </div>
+      </div>
+
+      <input type="submit" value="Submit" disabled />
+    </form>
+
+    <div id="newFormArea">
+      <div class="success-message" id="successMessage">
+        <div class="success-icon">✅</div>
+        <h3>Data Berhasil Disubmit</h3>
+      </div>
+    </div>
+
+    <script>
+      // Set minimal tanggal pinjam ke hari ini
+      document.addEventListener("DOMContentLoaded", function () {
+        const today = new Date().toISOString().split("T")[0];
+        document.getElementById("tanggalPinjam").setAttribute("min", today);
+      });
+
+      // Event listener untuk tanggal pinjam agar mempengaruhi batas minimal tanggal pengembalian
+      document
+        .getElementById("tanggalPinjam")
+        .addEventListener("change", function () {
+          const tanggalPinjam = document.getElementById("tanggalPinjam").value;
+          document
+            .getElementById("tanggalKembali")
+            .setAttribute("min", tanggalPinjam);
+        });
+
+      function handleFormSubmit(formObject) {
+        google.script.run
+          .withSuccessHandler(function (message) {
+            document.getElementById("myForm").style.display = "none";
+            document.getElementById("newFormArea").style.display = "block";
+            document.getElementById("successMessage").style.display = "block";
+          })
+          .submitDataToDatabase(formObject);
+      }
+
+      document
+        .getElementById("myForm")
+        .addEventListener("submit", function (e) {
+          e.preventDefault();
+          var formData = new FormData(this);
+          var jenisBarangSelected = document.getElementById(
+            "jenisBarangSelected"
+          ).value;
+          var formObject = {
+            namaPeminjam: formData.get("namaPeminjam"),
+            nip: formData.get("nip"),
+            jabatan: formData.get("jabatan"),
+            nomorTelepon: formData.get("nomorTelepon"),
+            tanggalPinjam: formData.get("tanggalPinjam"),
+            tanggalKembali: formData.get("tanggalKembali"),
+            ruangan: formData.get("ruangan"),
+            jenisBarang: jenisBarangSelected,
+            checkBoxKesepakatan: formData.get("checkBoxKesepakatan")
+              ? "Ya"
+              : "Tidak",
+          };
+
+          handleFormSubmit(formObject);
+        });
+
+      function populateDropdowns() {
+        google.script.run
+          .withSuccessHandler(function (ruanganOptions) {
+            const ruanganSelect = document.getElementById("ruangan");
+            ruanganOptions.forEach(function (option) {
+              const opt = document.createElement("option");
+              opt.value = option;
+              opt.text = option;
+              ruanganSelect.appendChild(opt);
+            });
+          })
+          .getRuanganOptions();
+
+        google.script.run
+          .withSuccessHandler(function (jenisBarangOptions) {
+            const jenisBarangSelect = document.getElementById("jenisBarang");
+            jenisBarangOptions.forEach(function (option) {
+              const opt = document.createElement("option");
+              opt.value = option;
+              opt.text = option;
+              jenisBarangSelect.appendChild(opt);
+            });
+          })
+          .getJenisBarangOptions();
+      }
+
+      populateDropdowns();
+
+      // Tambah Barang ke List
+      document
+        .getElementById("addJenisBarang")
+        .addEventListener("click", function () {
+          const jenisBarang = document.getElementById("jenisBarang").value;
+          if (jenisBarang) {
+            const jenisBarangSelected = document.getElementById(
+              "jenisBarangSelected"
+            );
+            const currentValue = jenisBarangSelected.value;
+            jenisBarangSelected.value =
+              currentValue + (currentValue ? ", " : "") + jenisBarang;
+          }
+        });
+
+      // Upload Foto dan Tampilkan Gambar
+      document
+        .getElementById("uploadFoto")
+        .addEventListener("change", function (e) {
+          const file = e.target.files[0];
+          if (file) {
+            const reader = new FileReader();
+            reader.onload = function (e) {
+              document.getElementById("uploadedImage").src = e.target.result;
+              document.getElementById("uploadedImage").style.display = "block";
+            };
+            reader.readAsDataURL(file);
+          }
+          checkFormCompletion(); // Check if the form is complete
+        });
+
+      // Tampilkan hiddenSection ketika ruangan dipilih
+      document
+        .getElementById("ruangan")
+        .addEventListener("change", function () {
+          document.getElementById("hiddenSection").style.display = "block";
+        });
+
+      // Check if all required fields are filled
+      function checkFormCompletion() {
+        const namaPeminjam = document.getElementById("namaPeminjam").value;
+        const nip = document.getElementById("nip").value;
+        const jabatan = document.getElementById("jabatan").value;
+        const nomorTelepon = document.getElementById("nomorTelepon").value;
+        const tanggalPinjam = document.getElementById("tanggalPinjam").value;
+        const tanggalKembali = document.getElementById("tanggalKembali").value;
+        const ruangan = document.getElementById("ruangan").value;
+        const jenisBarangSelected = document.getElementById(
+          "jenisBarangSelected"
+        ).value;
+        const foto = document.getElementById("uploadFoto").files.length > 0;
+        const kesepakatan = document.getElementById("kesepakatan").checked;
+
+        const submitButton = document.querySelector('input[type="submit"]');
+        if (
+          namaPeminjam &&
+          nip &&
+          jabatan &&
+          nomorTelepon &&
+          tanggalPinjam &&
+          tanggalKembali &&
+          ruangan &&
+          jenisBarangSelected &&
+          foto &&
+          kesepakatan
+        ) {
+          submitButton.disabled = false; // Enable the submit button
+        } else {
+          submitButton.disabled = true; // Disable the submit button
+        }
+      }
+
+      // Add event listeners to all inputs to check form completion
+      document
+        .querySelectorAll("input, select, textarea")
+        .forEach(function (element) {
+          element.addEventListener("input", checkFormCompletion);
+        });
+    </script>
+  </body>
+</html>
